@@ -1,0 +1,4 @@
+model = "gpt-5-codex"
+model_reasoning_effort = "medium"
+[projects."/mnt/g/AI/Code/DCC"]
+trust_level = "trusted"

@@ -1,0 +1,7 @@
+module.exports = {
+  arrowParens: "always",
+  printWidth: 90,
+  semi: true,
+  singleQuote: false,
+  trailingComma: "none"
+};

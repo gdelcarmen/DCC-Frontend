@@ -1,0 +1,23 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "lib": ["DOM", "DOM.Iterable", "ES2022"],
+    "moduleResolution": "Bundler",
+    "allowJs": false,
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "verbatimModuleSyntax": false,
+    "baseUrl": ".",
+    "paths": {
+      "@dcc/ui-library/*": ["ui-library/src/*"],
+      "@dcc/ui-library": ["ui-library/src/index.ts"],
+      "@dcc/cms-schemas/*": ["cms-schemas/src/*"],
+      "@dcc/cms-schemas": ["cms-schemas/src/schemas/index.ts"],
+      "@dcc/web-app/*": ["web-app/*"]
+    }
+  }
+}

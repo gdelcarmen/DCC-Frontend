@@ -1,50 +1,38 @@
-# [PROJECT_NAME] Constitution
-<!-- Example: Spec Constitution, TaskFlow Constitution, etc. -->
+# Del Carmen Consulting Web Rebuild Constitution
 
 ## Core Principles
 
-### [PRINCIPLE_1_NAME]
-<!-- Example: I. Library-First -->
-[PRINCIPLE_1_DESCRIPTION]
-<!-- Example: Every feature starts as a standalone library; Libraries must be self-contained, independently testable, documented; Clear purpose required - no organizational-only libraries -->
+### I. Code Quality & Libraries First
+Every deliverable uses a consistent Prettier + ESLint configuration, enforces strict TypeScript, and treats features as reusable library-grade components. All code changes are version-controlled with descriptive, intent-driven commit messages.
 
-### [PRINCIPLE_2_NAME]
-<!-- Example: II. CLI Interface -->
-[PRINCIPLE_2_DESCRIPTION]
-<!-- Example: Every library exposes functionality via CLI; Text in/out protocol: stdin/args → stdout, errors → stderr; Support JSON + human-readable formats -->
+### II. Test-First Delivery
+Each feature begins with unit, integration, and end-to-end tests (Jest, React Testing Library, Cypress/Playwright). Implementation may not begin until red-state tests exist and is complete only when the full suite is green with ≥80% coverage.
 
-### [PRINCIPLE_3_NAME]
-<!-- Example: III. Test-First (NON-NEGOTIABLE) -->
-[PRINCIPLE_3_DESCRIPTION]
-<!-- Example: TDD mandatory: Tests written → User approved → Tests fail → Then implement; Red-Green-Refactor cycle strictly enforced -->
+### III. Accessibility & Experience Consistency
+WCAG 2.1 AA compliance, semantic HTML, keyboard navigation, descriptive alt text, and respect for user motion/contrast preferences are mandatory. Shared design tokens ensure cohesive typography, colour, and component behaviour across devices.
 
-### [PRINCIPLE_4_NAME]
-<!-- Example: IV. Integration Testing -->
-[PRINCIPLE_4_DESCRIPTION]
-<!-- Example: Focus areas requiring integration tests: New library contract tests, Contract changes, Inter-service communication, Shared schemas -->
+### IV. Performance & Observability
+Pages target under 2s load on 3G through SSG/SSR discipline, optimized assets, deferred scripts, caching, and structured data for SEO. Every module exposes a CLI entry point for build/test/diagnostics to maintain observability.
 
-### [PRINCIPLE_5_NAME]
-<!-- Example: V. Observability, VI. Versioning & Breaking Changes, VII. Simplicity -->
-[PRINCIPLE_5_DESCRIPTION]
-<!-- Example: Text I/O ensures debuggability; Structured logging required; Or: MAJOR.MINOR.BUILD format; Or: Start simple, YAGNI principles -->
+### V. Security & Privacy
+All user input is validated and sanitised server-side. Forms employ honeypots and rate limiting, third-party scripts are minimised, and consent is required before tracking. Privacy policies and disclaimers must reflect data practices accurately.
 
-## [SECTION_2_NAME]
-<!-- Example: Additional Constraints, Security Requirements, Performance Standards, etc. -->
+## Architectural Constraints
 
-[SECTION_2_CONTENT]
-<!-- Example: Technology stack requirements, compliance standards, deployment policies, etc. -->
+- Maximum of three top-level workspaces (web-app, ui-library, cms-schemas).  
+- Sanity CMS is the single source of truth for content and permissions.  
+- Framer Motion animations must honour `prefers-reduced-motion`.  
+- Map visualisations surface only permission-validated agencies and data.
 
-## [SECTION_3_NAME]
-<!-- Example: Development Workflow, Review Process, Quality Gates, etc. -->
+## Workflow Expectations
 
-[SECTION_3_CONTENT]
-<!-- Example: Code review requirements, testing gates, deployment approval process, etc. -->
+- Documentation (spec, plan, research, contracts, tasks) must be current before implementation.  
+- CI pipelines block merges without lint, type, and test success.  
+- Accessibility, performance, and security gates are re-verified at each milestone.  
+- Any deviation from constraints requires documented justification in Complexity Tracking.
 
 ## Governance
-<!-- Example: Constitution supersedes all other practices; Amendments require documentation, approval, migration plan -->
 
-[GOVERNANCE_RULES]
-<!-- Example: All PRs/reviews must verify compliance; Complexity must be justified; Use [GUIDANCE_FILE] for runtime development guidance -->
+This constitution supersedes other practices for the DCC rebuild. Amendments require written rationale, risk assessment, and approval before implementation changes proceed.
 
-**Version**: [CONSTITUTION_VERSION] | **Ratified**: [RATIFICATION_DATE] | **Last Amended**: [LAST_AMENDED_DATE]
-<!-- Example: Version: 2.1.1 | Ratified: 2025-06-13 | Last Amended: 2025-07-16 -->
+**Version**: 1.0.0 | **Ratified**: 2025-10-12 | **Last Amended**: 2025-10-12
