@@ -1,9 +1,6 @@
-'use server';
-
 import { Box, Container, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
-import type { Metadata } from "next";
-
 import { CaseCard } from "@dcc/ui-library/components/CaseCard";
+import type { Metadata } from "next";
 
 import {
   getInsightsIndexContent,
@@ -26,9 +23,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const sanitizeJson = (value: unknown): string =>
-  JSON.stringify(value)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e");
+  JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e");
 
 export default async function CaseStudiesPage(): Promise<JSX.Element> {
   const content = await getInsightsIndexContent();
@@ -43,7 +38,8 @@ export default async function CaseStudiesPage(): Promise<JSX.Element> {
               Case studies
             </Heading>
             <Text fontSize={{ base: "lg", md: "xl" }} color="text.muted">
-              Engagements that demonstrate how we deliver durable reforms, accountability, and community trust.
+              Engagements that demonstrate how we deliver durable reforms, accountability,
+              and community trust.
             </Text>
           </Stack>
 
@@ -63,7 +59,9 @@ export default async function CaseStudiesPage(): Promise<JSX.Element> {
               ))}
             </SimpleGrid>
           ) : (
-            <Text color="text.muted">Case studies are coming soon. Subscribe for updates.</Text>
+            <Text color="text.muted">
+              Case studies are coming soon. Subscribe for updates.
+            </Text>
           )}
 
           <Box

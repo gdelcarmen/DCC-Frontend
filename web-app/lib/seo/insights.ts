@@ -4,12 +4,12 @@ import type {
   InsightsCaseStudyDetail,
   InsightsCaseStudySummary,
   InsightsIndexContent,
-  InsightsPostDetail,
-  InsightsPostSummary
+  InsightsPostDetail
 } from "../queries/insights";
 
 const SITE_NAME = "Del Carmen Consulting";
-const FALLBACK_SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://delcarmenconsulting.com";
+const FALLBACK_SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL ?? "https://delcarmenconsulting.com";
 
 const toAbsoluteUrl = (path: string): string => {
   try {
@@ -86,16 +86,26 @@ export const buildBlogIndexJsonLd = (
 ): { graph: Record<string, unknown>; articles: ArticleJson[] } => {
   const posts = content.posts.length
     ? content.posts
-    : fallbackPosts.map(({ slug, title, excerpt, publishedAt, estimatedRead, categories, heroImage }) => ({
-        slug,
-        title,
-        excerpt,
-        publishedAt,
-        estimatedRead,
-        status: "published" as const,
-        categories,
-        heroImage
-      }));
+    : fallbackPosts.map(
+        ({
+          slug,
+          title,
+          excerpt,
+          publishedAt,
+          estimatedRead,
+          categories,
+          heroImage
+        }) => ({
+          slug,
+          title,
+          excerpt,
+          publishedAt,
+          estimatedRead,
+          status: "published" as const,
+          categories,
+          heroImage
+        })
+      );
 
   const articles: ArticleJson[] = posts.map((post, index) => ({
     slug: post.slug,
@@ -206,7 +216,16 @@ export const buildCaseStudiesIndexJsonLd = (
   const caseStudies: InsightsCaseStudySummary[] = content.caseStudies.length
     ? content.caseStudies
     : fallbackCaseStudies.map(
-        ({ slug, title, summary, status, publishedAt, metrics, testimonial, heroImage }) => ({
+        ({
+          slug,
+          title,
+          summary,
+          status,
+          publishedAt,
+          metrics,
+          testimonial,
+          heroImage
+        }) => ({
           id: slug,
           slug,
           title,

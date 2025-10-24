@@ -13,14 +13,16 @@ const getEnv = (key: RequiredEnv): string => {
     return `test-${key.toLowerCase()}`;
   }
 
-  if (process.env.NODE_ENV !== "production") {
-    console.warn(
-      `[sanity] Missing ${key}. Using placeholder credentials; Sanity data will fall back to seeded defaults.`
-    );
-    return `placeholder-${key.toLowerCase()}`;
+  const placeholder = `placeholder-${key.toLowerCase()}`;
+  const message = `[sanity] Missing ${key}. Using placeholder credentials; Sanity data will fall back to seeded defaults.`;
+
+  if (process.env.NODE_ENV === "production") {
+    console.error(message);
+    return placeholder;
   }
 
-  throw new Error(`Missing required environment variable: ${key}`);
+  console.warn(message);
+  return placeholder;
 };
 
 const apiVersion = "2024-05-01";
@@ -36,7 +38,9 @@ const baseConfig: ClientConfig = {
 const withToken = (): ClientConfig => {
   const token = process.env.SANITY_API_TOKEN;
   if (!token) {
-    throw new Error("Missing SANITY_API_TOKEN environment variable for authenticated Sanity requests.");
+    throw new Error(
+      "Missing SANITY_API_TOKEN environment variable for authenticated Sanity requests."
+    );
   }
   return { ...baseConfig, token, useCdn: false };
 };
@@ -71,7 +75,8 @@ const createCachedClient = (
 
 export const sanityConfig: ClientConfig = baseConfig;
 
-export const getSanityClient = (): SanityClient => createCachedClient(baseConfig, "__sanityClient");
+export const getSanityClient = (): SanityClient =>
+  createCachedClient(baseConfig, "__sanityClient");
 
 export const getSanityPreviewClient = (): SanityClient =>
   createCachedClient(withToken(), "__sanityPreviewClient");

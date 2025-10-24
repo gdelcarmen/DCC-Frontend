@@ -1,8 +1,8 @@
-'use server';
-
 import { Box, Divider, Stack, Text } from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+
+import { PostLayout } from "../_components/PostLayout";
 
 import { PortableTextRenderer } from "@dcc/web-app/lib/portableText";
 import {
@@ -10,13 +10,16 @@ import {
   getPostSlugs,
   __fallback as insightsFallback
 } from "@dcc/web-app/lib/queries/insights";
-import { buildBlogPostJsonLd, buildBlogPostMetadata } from "@dcc/web-app/lib/seo/insights";
-import { PostLayout } from "../_components/PostLayout";
+import {
+  buildBlogPostJsonLd,
+  buildBlogPostMetadata
+} from "@dcc/web-app/lib/seo/insights";
 
 export const revalidate = 300;
 
 const getSiteUrl = () =>
-  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ?? "https://delcarmenconsulting.com";
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") ??
+  "https://delcarmenconsulting.com";
 
 type Params = {
   params: {
@@ -70,8 +73,8 @@ export default async function BlogPostPage({ params }: Params): Promise<JSX.Elem
           <PortableTextRenderer value={post.body} />
         ) : (
           <Text color="text.muted">
-            Detailed narrative coming soon. Subscribe for updates on reform playbooks and agency success
-            stories.
+            Detailed narrative coming soon. Subscribe for updates on reform playbooks and
+            agency success stories.
           </Text>
         )}
 

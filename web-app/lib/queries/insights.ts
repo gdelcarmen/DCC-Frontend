@@ -1,11 +1,10 @@
-'use server';
-
 import type {
   CaseStatus,
   PortableText,
   SeoMetadata,
   SiteSettings
 } from "@dcc/ui-library";
+
 import { getSanityClient, groq } from "../sanity/client";
 
 type SanityImageAsset = {
@@ -158,9 +157,12 @@ const FALLBACK_POSTS: InsightsPostDetail[] = [
       alt: "Training facilitator leading scenario practice"
     },
     body: [],
-    authors: [{ id: "author-bryant", name: "Jordan Bryant", role: "Director of Training" }],
+    authors: [
+      { id: "author-bryant", name: "Jordan Bryant", role: "Director of Training" }
+    ],
     seo: {
-      title: "Iterative training playbook for sustainable reforms | Del Carmen Consulting",
+      title:
+        "Iterative training playbook for sustainable reforms | Del Carmen Consulting",
       description:
         "Discover how Del Carmen Consulting structures experiential training programs that stick long after the workshops end."
     }
@@ -190,7 +192,8 @@ const FALLBACK_CASE_STUDIES: InsightsCaseStudyDetail[] = [
     outcomes: [],
     seo: {
       title: "Bias audit initiative | Del Carmen Consulting",
-      description: "Cedar Grove PD partnered with DCC to uncover and remediate bias indicators across all operations."
+      description:
+        "Cedar Grove PD partnered with DCC to uncover and remediate bias indicators across all operations."
     }
   },
   {
@@ -206,7 +209,8 @@ const FALLBACK_CASE_STUDIES: InsightsCaseStudyDetail[] = [
       { label: "Community briefings", value: "18" }
     ],
     testimonial: {
-      quote: "DCC translated our decades of data into a narrative our community could trust.",
+      quote:
+        "DCC translated our decades of data into a narrative our community could trust.",
       person: "Chief Renee Alvarado",
       role: "Southside Police Department",
       canDisplay: true
@@ -228,8 +232,21 @@ const FALLBACK_CASE_STUDIES: InsightsCaseStudyDetail[] = [
 
 const FALLBACK_INDEX: InsightsIndexContent = {
   siteSettings: null,
-  posts: FALLBACK_POSTS.map(({ body, authors, seo, ...summary }) => summary),
-  caseStudies: FALLBACK_CASE_STUDIES.map(({ objective, approach, outcomes, seo, ...summary }) => summary),
+  posts: FALLBACK_POSTS.map((post) => {
+    const { body, authors, seo, ...summary } = post;
+    void body;
+    void authors;
+    void seo;
+    return summary;
+  }),
+  caseStudies: FALLBACK_CASE_STUDIES.map((study) => {
+    const { objective, approach, outcomes, seo, ...summary } = study;
+    void objective;
+    void approach;
+    void outcomes;
+    void seo;
+    return summary;
+  }),
   categories: ["Data Analytics", "Community Engagement", "Innovation & Training"],
   featuredCaseStudy: FALLBACK_CASE_STUDIES[1],
   totalPosts: FALLBACK_POSTS.length
@@ -293,20 +310,24 @@ const insightsQuery = groq`{
 }`;
 
 const hasSanityCredentials = (): boolean =>
-  Boolean(process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_DATASET);
+  Boolean(
+    process.env.NEXT_PUBLIC_SANITY_PROJECT_ID && process.env.NEXT_PUBLIC_SANITY_DATASET
+  );
 
 const normalizePost = (post: SanityPost): InsightsPostDetail | null => {
   if (!post.slug?.current && !post.slug) {
     return null;
   }
 
-  const slug = typeof post.slug === "string" ? post.slug : post.slug?.current ?? "";
+  const slug = typeof post.slug === "string" ? post.slug : (post.slug?.current ?? "");
   const publishedAt = post.publishedAt ?? new Date().toISOString();
   if (post.status === "draft") {
     return null;
   }
   const status =
-    post.placeholder === true || post.status === "comingSoon" ? "comingSoon" : "published";
+    post.placeholder === true || post.status === "comingSoon"
+      ? "comingSoon"
+      : "published";
 
   return {
     id: post._id ?? slug,
@@ -336,12 +357,15 @@ const normalizePost = (post: SanityPost): InsightsPostDetail | null => {
   };
 };
 
-const normalizeCaseStudy = (caseStudy: SanityCaseStudy): InsightsCaseStudyDetail | null => {
+const normalizeCaseStudy = (
+  caseStudy: SanityCaseStudy
+): InsightsCaseStudyDetail | null => {
   if (!caseStudy.slug?.current && typeof caseStudy.slug !== "string") {
     return null;
   }
 
-  const slug = typeof caseStudy.slug === "string" ? caseStudy.slug : caseStudy.slug?.current ?? "";
+  const slug =
+    typeof caseStudy.slug === "string" ? caseStudy.slug : (caseStudy.slug?.current ?? "");
 
   return {
     id: caseStudy._id ?? slug,
@@ -351,9 +375,7 @@ const normalizeCaseStudy = (caseStudy: SanityCaseStudy): InsightsCaseStudyDetail
       caseStudy.summary ??
       "Del Carmen Consulting partners with agencies to implement sustainable reforms.",
     status:
-      caseStudy.placeholder === true
-        ? "comingSoon"
-        : caseStudy.status ?? "comingSoon",
+      caseStudy.placeholder === true ? "comingSoon" : (caseStudy.status ?? "comingSoon"),
     publishedAt: caseStudy.publishedAt ?? new Date().toISOString(),
     metrics: caseStudy.metrics ?? [],
     testimonial: caseStudy.spotlightTestimonial
@@ -400,8 +422,21 @@ export async function getInsightsIndexContent(): Promise<InsightsIndexContent> {
 
     return {
       siteSettings: data.siteSettings ?? null,
-      posts: normalizedPosts.map(({ body, authors, seo, ...summary }) => summary),
-      caseStudies: normalizedCaseStudies.map(({ objective, approach, outcomes, seo, ...summary }) => summary),
+      posts: normalizedPosts.map((post) => {
+        const { body, authors, seo, ...summary } = post;
+        void body;
+        void authors;
+        void seo;
+        return summary;
+      }),
+      caseStudies: normalizedCaseStudies.map((caseStudy) => {
+        const { objective, approach, outcomes, seo, ...summary } = caseStudy;
+        void objective;
+        void approach;
+        void outcomes;
+        void seo;
+        return summary;
+      }),
       categories: Array.from(
         new Set(normalizedPosts.flatMap((post) => post.categories).filter(Boolean))
       ),
@@ -466,7 +501,9 @@ export async function getPostBySlug(slug: string): Promise<InsightsPostDetail | 
   }
 }
 
-export async function getCaseStudyBySlug(slug: string): Promise<InsightsCaseStudyDetail | null> {
+export async function getCaseStudyBySlug(
+  slug: string
+): Promise<InsightsCaseStudyDetail | null> {
   if (!slug) {
     return null;
   }

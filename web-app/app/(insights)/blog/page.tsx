@@ -1,15 +1,15 @@
-'use server';
-
 import { Box, Container, Heading, Stack, Text } from "@chakra-ui/react";
-import type { Metadata } from "next";
-
 import { PostList } from "@dcc/ui-library/components/PostList";
+import type { Metadata } from "next";
 
 import {
   getInsightsIndexContent,
   __fallback as insightsFallback
 } from "@dcc/web-app/lib/queries/insights";
-import { buildBlogIndexJsonLd, buildBlogIndexMetadata } from "@dcc/web-app/lib/seo/insights";
+import {
+  buildBlogIndexJsonLd,
+  buildBlogIndexMetadata
+} from "@dcc/web-app/lib/seo/insights";
 
 export const revalidate = 300;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://delcarmenconsulting.com";
@@ -24,9 +24,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 const sanitizeJson = (value: unknown): string =>
-  JSON.stringify(value)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e");
+  JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e");
 
 export default async function BlogIndexPage(): Promise<JSX.Element> {
   const content = await getInsightsIndexContent();
@@ -41,25 +39,28 @@ export default async function BlogIndexPage(): Promise<JSX.Element> {
               Insights & Research
             </Heading>
             <Text fontSize={{ base: "lg", md: "xl" }} color="text.muted">
-              How Del Carmen Consulting partners with agencies to deliver sustained accountability, equity,
-              and data-driven reforms.
+              How Del Carmen Consulting partners with agencies to deliver sustained
+              accountability, equity, and data-driven reforms.
             </Text>
           </Stack>
 
           <PostList
             posts={content.posts}
-            buildStructuredData={(post) => {
-              const article = jsonLd.articles.find((item) => item.slug === post.slug);
-              return (
-                article?.data ?? {
-                  "@type": "BlogPosting",
-                  headline: post.title,
-                  datePublished: post.publishedAt,
-                  description: post.excerpt,
-                  url: `${siteUrl.replace(/\/$/, "")}/blog/${post.slug}`
-                }
-              );
-            }}
+            structuredDataBySlug={Object.fromEntries(
+              content.posts.map((post) => {
+                const article = jsonLd.articles.find((item) => item.slug === post.slug);
+                return [
+                  post.slug,
+                  article?.data ?? {
+                    "@type": "BlogPosting",
+                    headline: post.title,
+                    datePublished: post.publishedAt,
+                    description: post.excerpt,
+                    url: `${siteUrl.replace(/\/$/, "")}/blog/${post.slug}`
+                  }
+                ];
+              })
+            )}
           />
 
           <Box
