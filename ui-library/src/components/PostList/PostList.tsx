@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   AspectRatio,
@@ -34,15 +34,13 @@ export type PostListProps = {
   emptyMessage?: string;
   basePath?: string;
   ctaLabel?: string;
-  buildStructuredData?: (post: PostListItem) => Record<string, unknown>;
+  structuredDataBySlug?: Record<string, Record<string, unknown>>;
 };
 
 const DEFAULT_EMPTY_MESSAGE = "New insights are coming soon.";
 
 const sanitizeJson = (value: unknown): string =>
-  JSON.stringify(value)
-    .replace(/</g, "\\u003c")
-    .replace(/>/g, "\\u003e");
+  JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e");
 
 const PostListItemCard = memo(function PostListItemCard({
   post,
@@ -124,7 +122,7 @@ export function PostList({
   emptyMessage = DEFAULT_EMPTY_MESSAGE,
   basePath = "/blog",
   ctaLabel = "Read article",
-  buildStructuredData
+  structuredDataBySlug
 }: PostListProps): JSX.Element {
   const visiblePosts = useMemo(
     () => posts.filter((post) => post.status !== "draft"),
@@ -132,11 +130,13 @@ export function PostList({
   );
 
   const structuredData = useMemo(() => {
-    if (!buildStructuredData) {
+    if (!structuredDataBySlug) {
       return null;
     }
-    return visiblePosts.map((post) => buildStructuredData(post));
-  }, [buildStructuredData, visiblePosts]);
+    return visiblePosts
+      .map((post) => structuredDataBySlug[post.slug])
+      .filter((data): data is Record<string, unknown> => Boolean(data));
+  }, [structuredDataBySlug, visiblePosts]);
 
   if (!visiblePosts.length) {
     return <Text color="text.muted">{emptyMessage}</Text>;
@@ -146,15 +146,9 @@ export function PostList({
     <>
       <Stack spacing={6}>
         {visiblePosts.map((post) => {
-          const href =
-            post.status === "published" ? `${basePath}/${post.slug}` : null;
+          const href = post.status === "published" ? `${basePath}/${post.slug}` : null;
           return (
-            <PostListItemCard
-              key={post.id}
-              post={post}
-              href={href}
-              ctaLabel={ctaLabel}
-            />
+            <PostListItemCard key={post.id} post={post} href={href} ctaLabel={ctaLabel} />
           );
         })}
       </Stack>

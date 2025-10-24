@@ -1,6 +1,12 @@
-'use server';
-
-import { Box, Container, Divider, Heading, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import {
+  Box,
+  Container,
+  Divider,
+  Heading,
+  SimpleGrid,
+  Stack,
+  Text
+} from "@chakra-ui/react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
@@ -10,7 +16,10 @@ import {
   getCaseStudySlugs,
   __fallback as insightsFallback
 } from "@dcc/web-app/lib/queries/insights";
-import { buildCaseStudyJsonLd, buildCaseStudyMetadata } from "@dcc/web-app/lib/seo/insights";
+import {
+  buildCaseStudyJsonLd,
+  buildCaseStudyMetadata
+} from "@dcc/web-app/lib/seo/insights";
 
 export const revalidate = 300;
 
@@ -38,7 +47,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
 const sanitizeJson = (value: unknown): string =>
   JSON.stringify(value).replace(/</g, "\\u003c").replace(/>/g, "\\u003e");
 
-export default async function CaseStudyDetailPage({ params }: Params): Promise<JSX.Element> {
+export default async function CaseStudyDetailPage({
+  params
+}: Params): Promise<JSX.Element> {
   const caseStudy =
     (await getCaseStudyBySlug(params.slug)) ??
     insightsFallback.caseStudies.find((fallback) => fallback.slug === params.slug) ??
@@ -74,8 +85,8 @@ export default async function CaseStudyDetailPage({ params }: Params): Promise<J
 
           {caseStudy.status !== "published" ? (
             <Text color="text.muted" fontWeight="medium">
-              Case study coming soon. Sign up for our newsletter to be the first to know when the full
-              engagement story is available.
+              Case study coming soon. Sign up for our newsletter to be the first to know
+              when the full engagement story is available.
             </Text>
           ) : null}
 
@@ -125,8 +136,13 @@ export default async function CaseStudyDetailPage({ params }: Params): Promise<J
           ) : null}
 
           {caseStudy.testimonial?.canDisplay ? (
-            <Box borderLeftWidth="4px" borderLeftColor="accent.teal" pl={4} fontStyle="italic">
-              <Text>"{caseStudy.testimonial.quote}"</Text>
+            <Box
+              borderLeftWidth="4px"
+              borderLeftColor="accent.teal"
+              pl={4}
+              fontStyle="italic"
+            >
+              <Text>&ldquo;{caseStudy.testimonial.quote}&rdquo;</Text>
               <Text fontWeight="semibold" mt={2}>
                 {caseStudy.testimonial.person}
               </Text>
